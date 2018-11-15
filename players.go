@@ -70,7 +70,6 @@ func Players(year string) ([]Player, error) {
 	player_json := result["league"].(map[string]interface{})
 
 	for league_type, players := range player_json {
-		fmt.Println(league_type)
 		for _, player_data := range players.([]interface{}) {
 			player := Player{}
 			mapstructure.WeakDecode(player_data, &player)

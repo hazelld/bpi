@@ -30,7 +30,11 @@ func TestMain(m *testing.M) {
 			fmt.Println(i)
 		}
 	*/
+	/*
+		scoreboards, _ := bba.Scoreboards("20181107")
+		fmt.Println(scoreboards)
+	*/
 
-	scoreboards, _ := bba.Scoreboards("20181107")
-	fmt.Println(scoreboards)
+	games, _ := bba.Games("2018")
+	fmt.Println(games)
 }
