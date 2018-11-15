@@ -4,6 +4,7 @@ import (
 	bba "bpi"
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestMain(m *testing.M) {
@@ -34,7 +35,12 @@ func TestMain(m *testing.M) {
 		scoreboards, _ := bba.Scoreboards("20181107")
 		fmt.Println(scoreboards)
 	*/
-
-	games, _ := bba.Games("2018")
-	fmt.Println(games)
+	/*
+		games, _ := bba.GamesByYear("2018")
+		fmt.Println(games)
+	*/
+	todays_games, _ := bba.GamesByDay(time.Now())
+	for _, game := range todays_games {
+		fmt.Println(game)
+	}
 }

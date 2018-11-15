@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
+	"strconv"
+	"time"
 )
 
 type Game struct {
@@ -27,7 +29,25 @@ type Game struct {
 	Broadcasters []Broadcaster
 }
 
-func Games(year string) ([]Game, error) {
+func GamesByDay(day time.Time) ([]Game, error) {
+	year := strconv.Itoa(day.Year())
+	all_games, err := GamesByYear(year)
+
+	if err != nil {
+		return []Game{}, err
+	}
+
+	games := []Game{}
+	date_as_string := fmt.Sprintf("%d%d%d", day.Year(), day.Month(), day.Day())
+	for _, game := range all_games {
+		if game.StartDateEastern == date_as_string {
+			games = append(games, game)
+		}
+	}
+	return games, nil
+}
+
+func GamesByYear(year string) ([]Game, error) {
 	all_games := []Game{}
 	raw_json, err := MakeRequest(fmt.Sprintf("/prod/v2/%s/schedule.json", year))
 	if err != nil {
@@ -53,7 +73,7 @@ func Games(year string) ([]Game, error) {
 	for _, games_array := range games_raw {
 		for _, game_raw := range games_array.([]interface{}) {
 			game := game_raw.(Game)
-			fmt.Println(game)
+			all_games = append(all_games, game)
 		}
 	}
 	return all_games, nil
