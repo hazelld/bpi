@@ -16,7 +16,7 @@ type Game struct {
 	StatusNum         int
 	ExtendedStatusNum int
 	StartTimeUTC      string
-	StartDateEastern  string
+	StartDateEastern  time.Time
 	StartTimeEastern  string
 	IsBuzzerBeater    bool
 	Tags              []string
@@ -38,9 +38,8 @@ func GamesByDay(day time.Time) ([]Game, error) {
 	}
 
 	games := []Game{}
-	date_as_string := fmt.Sprintf("%d%d%d", day.Year(), day.Month(), day.Day())
 	for _, game := range all_games {
-		if game.StartDateEastern == date_as_string {
+		if CompareDay(game.StartDateEastern, day) {
 			games = append(games, game)
 		}
 	}
@@ -60,11 +59,17 @@ func GamesByYear(year string) ([]Game, error) {
 	league_schedule := unwrapPath(result, []string{"league"})
 	games_raw := unwrapMap(league_schedule, func(league_name string, d interface{}) interface{} {
 		games := unwrapArray(d, func(i int, game_raw interface{}) interface{} {
+
 			game := Game{}
 			mapstructure.WeakDecode(game_raw, &game)
 			game.League = league_name
 			game.Video = LoadVideoFromSchedule(game_raw)
 			game.Broadcasters = LoadBroadcastersFromSchedule(game_raw)
+
+			// Convert the Eastern time to date structure
+			layout := "20060102"
+			eastern_time := game_raw.(map[string]interface{})["startDateEastern"]
+			game.StartDateEastern, err = time.Parse(layout, eastern_time.(string))
 			return game
 		})
 		return games

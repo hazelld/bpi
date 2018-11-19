@@ -9,6 +9,8 @@ should not be used until more functionality & tests are added.
 - Add database support to auto create database & populate
 
 ### data.nba.net:
+** Note this is just the basic loading method, the methods for loading relationships
+aren't included (ie. Loading all the plays for a given Game struct etc..) **
 - ~~Players~~
 - ~~Scoreboard~~
 - ~~Schedule~~
@@ -18,7 +20,7 @@ should not be used until more functionality & tests are added.
 - ~~Standings~~
 - Team Stat Leaders
 - BoxScore 
-- Play-By-Play
+- ~~Play-By-Play~~
 - LeadTracker
 - Player Game Log
 - Player Profile (?)
